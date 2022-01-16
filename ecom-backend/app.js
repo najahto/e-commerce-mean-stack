@@ -2,17 +2,24 @@ const express = require('express');
 const app = express();
 const morgan = require('morgan');
 const mongoose = require('mongoose');
+const cors = require('cors');
 
 require('dotenv/config');
 
+app.use(cors());
+
 app.use(express.json());
 app.use(morgan('tiny'));
+app.options('*', cors());
 
 const base_url = process.env.APP_URL;
 
-app.get(`${base_url}/`, (req, res) => {
-  res.send({ name: 'omar', age: 12 });
-});
+const productRouter = require('./routes/products');
+const categoryRouter = require('./routes/categories');
+
+// Routers
+app.use(`${base_url}/products`, productRouter);
+app.use(`${base_url}/categories`, categoryRouter);
 
 mongoose
   .connect(process.env.CONNECTION_STRING, {
