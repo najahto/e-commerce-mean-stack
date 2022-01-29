@@ -16,10 +16,12 @@ const base_url = process.env.APP_URL;
 
 const productRouter = require('./routes/products');
 const categoryRouter = require('./routes/categories');
+const userRouter = require('./routes/users');
 
 // Routers
 app.use(`${base_url}/products`, productRouter);
 app.use(`${base_url}/categories`, categoryRouter);
+app.use(`${base_url}/users`, userRouter);
 
 mongoose
   .connect(process.env.CONNECTION_STRING, {
