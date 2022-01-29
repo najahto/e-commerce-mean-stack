@@ -3,30 +3,31 @@ const app = express();
 const morgan = require('morgan');
 const mongoose = require('mongoose');
 const cors = require('cors');
-
 require('dotenv/config');
 const authJwt = require('./middleware/auth-jwt');
+const errorHandler = require('./helpers/error-handler');
 
 app.use(cors());
+app.options('*', cors());
 
+// middleware
 app.use(express.json());
 app.use(morgan('tiny'));
 app.use(authJwt());
-
-app.options('*', cors());
+app.use(errorHandler);
 
 const base_url = process.env.APP_URL;
 
+// Routers
 const productRouter = require('./routes/products');
 const categoryRouter = require('./routes/categories');
 const userRouter = require('./routes/users');
-const authJWT = require('./middleware/auth-jwt');
 
-// Routers
 app.use(`${base_url}/products`, productRouter);
 app.use(`${base_url}/categories`, categoryRouter);
 app.use(`${base_url}/users`, userRouter);
 
+// Database connection
 mongoose
   .connect(process.env.CONNECTION_STRING, {
     dbName: 'e-shopdb',
@@ -38,6 +39,7 @@ mongoose
     console.log(err);
   });
 
+// server
 app.listen(3000, () => {
   console.log('server is running ');
 });
