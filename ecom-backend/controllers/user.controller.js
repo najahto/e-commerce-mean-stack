@@ -123,10 +123,24 @@ const updateUser = async (req, res) => {
   });
 };
 
+/**
+ * Users count
+ */
+const getUsersCount = async (req, res) => {
+  const userCount = await User.countDocuments();
+  if (!userCount) {
+    res.statusCode(500).json({ success: false });
+  }
+  res.status(200).send({
+    count: userCount,
+  });
+};
+
 module.exports = {
   registerUser,
   getUsers,
   findUser,
   updateUser,
   userLogin,
+  getUsersCount,
 };

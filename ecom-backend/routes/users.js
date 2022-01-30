@@ -12,5 +12,6 @@ router.get('/:id', userController.findUser);
 
 router.put('/:id', userController.updateUser);
 
+router.get('/get/count', userController.getUsersCount);
 
 module.exports = router;
