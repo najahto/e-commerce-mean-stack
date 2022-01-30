@@ -30,7 +30,7 @@ const createProduct = async (req, res, next) => {
   res.status(201).json({
     success: true,
     message: 'the product successfully created',
-    category: product,
+    product: product,
   });
 };
 
