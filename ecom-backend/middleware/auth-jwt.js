@@ -6,6 +6,7 @@ function authJWT() {
   return expressJwt({
     secret,
     algorithms: ['HS256'],
+    isRevoked: isRevoked,
   }).unless({
     path: [
       { url: /\/api\/v1\/products(.*)/, methods: ['GET', 'OPTIONS'] },
@@ -14,6 +15,14 @@ function authJWT() {
       `${api}/users/register`,
     ],
   });
+}
+
+// Check if the user is admin
+async function isRevoked(req, payload, done) {
+  if (!payload.isAdmin) {
+    done(null, true);
+  }
+  done();
 }
 
 module.exports = authJWT;

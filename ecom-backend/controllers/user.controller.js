@@ -16,6 +16,7 @@ const userLogin = async (req, res) => {
       {
         userId: user.id,
         userName: user.name,
+        isAdmin: user.isAdmin,
       },
       process.env.JWT_SECRET,
       { expiresIn: process.env.JWT_TOKEN_EXPIRES_IN }
