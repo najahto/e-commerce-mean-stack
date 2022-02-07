@@ -16,4 +16,6 @@ router.get('/get/totalSales', orderController.getTotalSales);
 
 router.get('/get/count', orderController.getOrdersCount);
 
+router.get('/get/userOrders/:userId', orderController.getUserOrders);
+
 module.exports = router;
