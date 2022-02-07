@@ -20,8 +20,25 @@ const createOrder = async (req, res) => {
       return newOrderItem._id;
     })
   );
+
   const orderItemsIdsResolved = await orderItemsIds;
-  console.log('orderItemsIdsResolved', orderItemsIdsResolved);
+
+  // calculate total price
+  const totalPrices = await Promise.all(
+    orderItemsIdsResolved.map(async (orderItemId) => {
+      const orderItem = await OrderItem.findById(orderItemId).populate(
+        'product',
+        'price'
+      );
+      console.log('orderItem??', orderItem);
+      return orderItem.product.price * orderItem.quantity;
+    })
+  );
+
+  // get the sum of totalPrices array items
+  const totalPrice = totalPrices.reduce((a, b) => a + b, 0);
+
+  // save the order
   let order = new Order({
     orderItems: orderItemsIdsResolved,
     shippingAddress1: req.body.shippingAddress1,
@@ -31,7 +48,7 @@ const createOrder = async (req, res) => {
     country: req.body.country,
     phone: req.body.phone,
     status: req.body.status,
-    totalPrice: req.body.totalPrice,
+    totalPrice: totalPrice,
     user: req.body.user,
   });
   order = await order.save();
