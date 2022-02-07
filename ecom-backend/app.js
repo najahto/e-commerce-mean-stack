@@ -22,10 +22,12 @@ const base_url = process.env.APP_URL;
 const productRouter = require('./routes/products');
 const categoryRouter = require('./routes/categories');
 const userRouter = require('./routes/users');
+const orderRouter = require('./routes/orders');
 
 app.use(`${base_url}/products`, productRouter);
 app.use(`${base_url}/categories`, categoryRouter);
 app.use(`${base_url}/users`, userRouter);
+app.use(`${base_url}/orders`, orderRouter);
 
 // Database connection
 mongoose
