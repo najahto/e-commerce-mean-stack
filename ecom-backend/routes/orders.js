@@ -12,4 +12,8 @@ router.put('/:id', orderController.updateOrder);
 
 router.delete('/:id', orderController.deleteOrder);
 
+router.get('/get/totalSales', orderController.getTotalSales);
+
+router.get('/get/count', orderController.getOrdersCount);
+
 module.exports = router;

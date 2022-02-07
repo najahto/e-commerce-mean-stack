@@ -137,10 +137,42 @@ const deleteOrder = async (req, res) => {
     });
 };
 
+/**
+ * Total sales
+ */
+const getTotalSales = async (req, res) => {
+  const totalSales = await Order.aggregate([
+    {
+      $group: { _id: null, totalSales: { $sum: '$totalPrice' } },
+    },
+  ]);
+  if (!totalSales) {
+    res.statusCode(500).send('Orders sales cannot be calculated');
+  }
+  res.status(200).send({
+    totalSales: totalSales.pop().totalSales,
+  });
+};
+
+/**
+ * Orders count
+ */
+const getOrdersCount = async (req, res) => {
+  const orderCount = await Order.countDocuments();
+  if (!orderCount) {
+    res.statusCode(500).json({ success: false });
+  }
+  res.status(200).send({
+    count: orderCount,
+  });
+};
+
 module.exports = {
   createOrder,
   getOrders,
   findOrder,
   updateOrder,
   deleteOrder,
+  getTotalSales,
+  getOrdersCount,
 };
