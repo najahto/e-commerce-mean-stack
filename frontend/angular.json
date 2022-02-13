@@ -1,0 +1,9 @@
+{
+  "version": 2,
+  "projects": {
+    "admin": "apps/admin",
+    "admin-e2e": "apps/admin-e2e",
+    "e-commerce": "apps/e-commerce",
+    "e-commerce-e2e": "apps/e-commerce-e2e"
+  }
+}
