@@ -1,6 +1,7 @@
 import { NgModule } from '@angular/core';
 import { BrowserModule } from '@angular/platform-browser';
 import { HttpClientModule } from '@angular/common/http';
+import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 
 import { AppComponent } from './app.component';
 import { RouterModule, Routes } from '@angular/router';
@@ -17,9 +18,11 @@ import { CategoriesService } from '@frontend/products';
 // import { CategoriesFormComponent } from './pages/categories/categories-form/categories-form.component';
 import { InputTextModule } from 'primeng/inputtext';
 import { ToastModule } from 'primeng/toast';
-// import { ConfirmationService, MessageService } from 'primeng/api';
+import { ConfirmationService, MessageService } from 'primeng/api';
 import { ConfirmDialogModule } from 'primeng/confirmdialog';
 import { ColorPickerModule } from 'primeng/colorpicker';
+import { CategoriesFormComponent } from './pages/categories/categories-form/categories-form.component';
+import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 
 const UX_MODULE = [
   CardModule,
@@ -45,6 +48,10 @@ const routes: Routes = [
         path: 'categories',
         component: CategoriesListComponent,
       },
+      {
+        path: 'categories/form',
+        component: CategoriesFormComponent,
+      },
     ],
   },
 ];
@@ -56,14 +63,18 @@ const routes: Routes = [
     ContentComponent,
     SidebarComponent,
     CategoriesListComponent,
+    CategoriesFormComponent,
   ],
   imports: [
     BrowserModule,
     HttpClientModule,
+    FormsModule,
+    ReactiveFormsModule,
+    BrowserAnimationsModule,
     RouterModule.forRoot(routes, { initialNavigation: 'enabledBlocking' }),
     ...UX_MODULE,
   ],
-  providers: [CategoriesService],
+  providers: [CategoriesService, MessageService, ConfirmationService],
   bootstrap: [AppComponent],
 })
 export class AppModule {}
