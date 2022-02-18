@@ -63,5 +63,14 @@
 
   &-page {
     padding: 15px;
+
+    .category {
+      &-icon {
+        font-size: 1.7rem;
+      }
+      &-color {
+        font-size: 1.7rem;
+      }
+    }
   }
 }

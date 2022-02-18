@@ -29,6 +29,9 @@
       ],
       "@frontend/users": [
         "libs/users/src/index.ts"
+      ],
+      "@frontend/admin/environments": [
+        "apps/admin/src/environments/environment"
       ]
     },
     "strictPropertyInitialization": false
