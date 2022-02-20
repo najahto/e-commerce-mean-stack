@@ -31,7 +31,7 @@ export class ProductsService {
     );
   }
 
-  /* deleteProduct(id: string): Observable<any> {
+  deleteProduct(id: string): Observable<any> {
     return this.http.delete<any>(`${this.baseUrl}/products/${id}`);
-  } */
+  }
 }
