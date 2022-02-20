@@ -3,20 +3,25 @@ import { HttpClient } from '@angular/common/http';
 import { User } from '../models/user.model';
 import { Observable } from 'rxjs';
 import { environment } from '@frontend/admin/environments';
+import * as countriesLib from 'i18n-iso-countries';
+
+declare const require: (arg0: string) => countriesLib.LocaleData;
+
 @Injectable({
   providedIn: 'root',
 })
 export class UsersService {
   baseUrl = environment.baseUrl;
 
-  constructor(private http: HttpClient) {}
+  constructor(private http: HttpClient) {
+    countriesLib.registerLocale(require('i18n-iso-countries/langs/en.json'));
+  }
 
   getUsers(): Observable<User[]> {
     return this.http.get<User[]>(`${this.baseUrl}/users`);
   }
 
   createUser(user: User): Observable<User> {
-    console.log("🚀 ~ file: users.service.ts ~ line 19 ~ UsersService ~ createUser ~ user", user)
     return this.http.post<User>(`${this.baseUrl}/users/register`, user);
   }
 
@@ -30,5 +35,23 @@ export class UsersService {
 
   deleteUser(id: string): Observable<any> {
     return this.http.delete<any>(`${this.baseUrl}/users/${id}`);
+  }
+
+  getCountries(): {
+    id: string;
+    name: string;
+  }[] {
+    return Object.entries(
+      countriesLib.getNames('en', { select: 'official' })
+    ).map((entry) => {
+      return {
+        id: entry[0],
+        name: entry[1],
+      };
+    });
+  }
+
+  getCountry(countryKey: string): string  {
+    return countriesLib.getName(countryKey, 'en');
   }
 }
