@@ -1,5 +1,5 @@
 <div class="admin-page">
-    <p-card header="Categories" subheader="List of all categories">
+    <p-card header="Users" subheader="List of all users">
         <div class="p-grid">
             <div class="p-col-12">
                 <p-toolbar>
@@ -12,31 +12,37 @@
         </div>
         <div class="grid mt-2">
             <div class="col-12">
-                <p-table styleClass="p-datatable-gridlines" [value]="categories">
+                <p-table styleClass="p-datatable-gridlines" [value]="users" [paginator]="true" [rows]="10">
                     <ng-template pTemplate="header">
                         <tr>
                             <th>Id</th>
                             <th pSortableColumn="name">Name <p-sortIcon field="name"></p-sortIcon>
                             </th>
-                            <th>Icon</th>
-                            <th>Color</th>
+                            <th>Email</th>
+                            <th>Is Admin</th>
+                            <th>Country</th>
                             <th>Actions</th>
                         </tr>
                     </ng-template>
-                    <ng-template pTemplate="body" let-category>
+                    <ng-template pTemplate="body" let-user>
                         <tr>
-                            <td>{{category.id}}</td>
-                            <td>{{category.name}}</td>
-                            <td><i class="category-icon" [ngClass]="category.icon"></i></td>
+                            <td>{{user.id}}</td>
+                            <td>{{user.name}}</td>
+                            <td>{{user.email}}</td>
                             <td>
-                                <i class="pi pi-circle-on category-color" [ngStyle]="{ color: category.color }"></i>
+                                <div *ngIf="user.isAdmin">
+                                    <p-tag value="admin" icon="pi pi-check" severity="success"></p-tag>
+                                </div>
+                                <div *ngIf="!user.isAdmin">
+                                    <p-tag value="not admin" icon="pi pi-times" severity="danger"></p-tag>
+                                </div>
                             </td>
+                            <td>{{user.country}}</td>
                             <td>
-                                <p-button (click)="updateCategory(category.id)" styleClass="p-button-primary mr-2"
+                                <p-button (click)="updateUser(user.id)" styleClass="p-button-primary mr-2"
                                     icon="pi pi-pencil">
                                 </p-button>
-                                <p-button (click)="deleteCategory(category.id)" styleClass="p-button-danger"
-                                    icon="pi pi-trash">
+                                <p-button (click)="deleteUser(user.id)" styleClass="p-button-danger" icon="pi pi-trash">
                                 </p-button>
                             </td>
                         </tr>
