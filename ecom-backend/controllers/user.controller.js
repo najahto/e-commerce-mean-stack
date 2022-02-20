@@ -124,6 +124,26 @@ const updateUser = async (req, res) => {
 };
 
 /**
+ * remove user
+ */
+const deleteUser = async (req, res) => {
+  User.findByIdAndRemove(req.params.id)
+    .then((user) => {
+      if (user) {
+        return res.status(200).json({
+          success: true,
+          message: 'the user deleted successfully',
+        });
+      } else {
+        res.status(404).json({ success: false, message: 'user not found!' });
+      }
+    })
+    .catch((err) => {
+      return res.status(400).json({ success: false, error: err });
+    });
+};
+
+/**
  * Users count
  */
 const getUsersCount = async (req, res) => {
@@ -141,6 +161,7 @@ module.exports = {
   getUsers,
   findUser,
   updateUser,
+  deleteUser,
   userLogin,
   getUsersCount,
 };
