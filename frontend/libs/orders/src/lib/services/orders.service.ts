@@ -20,8 +20,8 @@ export class OrdersService {
     return this.http.get<Order>(`${this.baseUrl}/orders/${id}`);
   }
 
-  editOrder(id: string, order: Order): Observable<Order> {
-    return this.http.put<Order>(`${this.baseUrl}/orders/${id}`, order);
+  editOrder(id: string, orderStatus: { status: string }): Observable<Order> {
+    return this.http.put<Order>(`${this.baseUrl}/orders/${id}`, orderStatus);
   }
 
   deleteOrder(id: string): Observable<any> {

@@ -2,6 +2,8 @@ import { Component, OnInit } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
 import { Order, OrdersService } from '@frontend/orders';
 import { MessageService } from 'primeng/api';
+import { OrderStatus } from '../order-status.type';
+import { ORDER_STATUS } from '../order.constants';
 
 @Component({
   selector: 'admin-orders-detail',
@@ -11,7 +13,7 @@ import { MessageService } from 'primeng/api';
 export class OrdersDetailComponent implements OnInit {
   order: Order;
   orderStatuses = [];
-  selectedStatus: any;
+  selectedStatus: string;
 
   constructor(
     private ordersService: OrdersService,
@@ -20,9 +22,30 @@ export class OrdersDetailComponent implements OnInit {
   ) {}
 
   ngOnInit(): void {
+    this._mapOrderStatus();
     this._getOrder();
   }
-  onStatusChange(event: any) {}
+
+  onStatusChange(event) {
+    this.ordersService
+      .editOrder(this.order.id, { status: event.value })
+      .subscribe(
+        () => {
+          this.messageService.add({
+            severity: 'success',
+            summary: 'Success',
+            detail: 'Order status updated!',
+          });
+        },
+        () => {
+          this.messageService.add({
+            severity: 'error',
+            summary: 'Error',
+            detail: 'Order status is not updated!',
+          });
+        }
+      );
+  }
 
   private _getOrder() {
     this.route.params.subscribe((params) => {
@@ -36,6 +59,15 @@ export class OrdersDetailComponent implements OnInit {
           this.selectedStatus = order.status;
         });
       }
+    });
+  }
+
+  private _mapOrderStatus() {
+    this.orderStatuses = Object.keys(ORDER_STATUS).map((key) => {
+      return {
+        key: key,
+        name: ORDER_STATUS[key].label,
+      };
     });
   }
 }
