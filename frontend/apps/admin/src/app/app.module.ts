@@ -1,6 +1,6 @@
 import { NgModule } from '@angular/core';
 import { BrowserModule } from '@angular/platform-browser';
-import { HttpClientModule } from '@angular/common/http';
+import { HttpClientModule, HTTP_INTERCEPTORS } from '@angular/common/http';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 
 import { AppComponent } from './app.component';
@@ -9,7 +9,7 @@ import { DashboardComponent } from './pages/dashboard/dashboard.component';
 import { ContentComponent } from './shared/content/content.component';
 import { SidebarComponent } from './shared/sidebar/sidebar.component';
 import { CategoriesListComponent } from './pages/categories/categories-list/categories-list.component';
-import { AuthGuard, UsersModule } from '@frontend/users';
+import { AuthGuard, JwtInterceptor, UsersModule } from '@frontend/users';
 
 import { CardModule } from 'primeng/card';
 import { ToolbarModule } from 'primeng/toolbar';
@@ -62,7 +62,7 @@ const routes: Routes = [
   {
     path: '',
     component: ContentComponent,
-    canActivate:[AuthGuard],
+    canActivate: [AuthGuard],
     children: [
       {
         path: 'dashboard',
@@ -141,7 +141,11 @@ const routes: Routes = [
     UsersModule,
     ...UX_MODULE,
   ],
-  providers: [MessageService, ConfirmationService],
+  providers: [
+    MessageService,
+    ConfirmationService,
+    { provide: HTTP_INTERCEPTORS, useClass: JwtInterceptor, multi: true },
+  ],
   bootstrap: [AppComponent],
 })
 export class AppModule {}

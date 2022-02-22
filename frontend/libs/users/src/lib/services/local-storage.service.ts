@@ -16,6 +16,7 @@ export class LocalStorageService {
   }
 
   removeToken() {
+    console.log("🚀 ~ file: local-storage.service.ts ~ line 19 ~ LocalStorageService ~ removeToken ~ removeToken")
     localStorage.removeItem(TOKEN);
   }
 }
