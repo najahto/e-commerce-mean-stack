@@ -49,6 +49,7 @@ export class LoginComponent implements OnInit {
           this.localStorageService.setToken(user.token);
           this.authMessageSeverity = 'success';
           this.authMessage = 'Success! Your account now logged in.';
+          this.router.navigate(['/']);
         },
         (error: HttpErrorResponse) => {
           this.isLoading = false;

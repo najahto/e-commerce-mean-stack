@@ -9,7 +9,7 @@ import { DashboardComponent } from './pages/dashboard/dashboard.component';
 import { ContentComponent } from './shared/content/content.component';
 import { SidebarComponent } from './shared/sidebar/sidebar.component';
 import { CategoriesListComponent } from './pages/categories/categories-list/categories-list.component';
-import { UsersModule } from '@frontend/users';
+import { AuthGuard, UsersModule } from '@frontend/users';
 
 import { CardModule } from 'primeng/card';
 import { ToolbarModule } from 'primeng/toolbar';
@@ -62,6 +62,7 @@ const routes: Routes = [
   {
     path: '',
     component: ContentComponent,
+    canActivate:[AuthGuard],
     children: [
       {
         path: 'dashboard',
