@@ -7,12 +7,12 @@
             <div class="col-6 p-5">
                 <h3>Welcome</h3>
                 <h2>Login Page</h2>
-                <form [formGroup]="form">
+                <form [formGroup]="loginFormGroup">
                     <div class="grid mt-6">
                         <div class="col-12">
                             <div class="p-inputgroup">
                                 <span class="p-inputgroup-addon"><i class="pi pi-user"></i></span>
-                                <input type="text" pInputText placeholder="Email">
+                                <input type="email" formControlName="email" pInputText placeholder="Email">
                             </div>
                             <small *ngIf="loginForm['email'].invalid && isSubmitted" class="p-error">
                                 <span *ngIf="loginForm.email.errors.required">Email is required</span>
@@ -22,14 +22,20 @@
                         <div class="col-12">
                             <div class="p-inputgroup ">
                                 <span class="p-inputgroup-addon"><i class="pi pi-lock"></i></span>
-                                <input type="password" pInputText placeholder="Password">
+                                <input type="password" formControlName="password" pInputText placeholder="Password">
                             </div>
                             <small *ngIf="loginForm['password'].invalid && isSubmitted" class="p-error">
                                 Password is required
                             </small>
                         </div>
                         <div class="col-12">
-                            <p-button (onClick)="onSubmit()" label="Submit" styleClass="full-btn"></p-button>
+                            <p-button (onClick)="onSubmit()" label="Submit" styleClass="full-btn"
+                                [disabled]="isLoading">
+                            </p-button>
+                        </div>
+                        <div class="col-12" *ngIf="isSubmitted && showLoginAlert">
+                            <p-message [severity]="authMessageSeverity" [text]="authMessage" styleClass="mr-2">
+                            </p-message>
                         </div>
                     </div>
                 </form>

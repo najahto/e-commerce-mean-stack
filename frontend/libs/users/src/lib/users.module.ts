@@ -5,6 +5,8 @@ import { LoginComponent } from './pages/login/login.component';
 import { InputTextModule } from 'primeng/inputtext';
 import { ButtonModule } from 'primeng/button';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
+import { MessageModule } from 'primeng/message';
+import { MessageService } from 'primeng/api';
 
 export const usersRoutes: Route[] = [];
 
@@ -15,15 +17,16 @@ const routes: Routes = [
   },
 ];
 
+const UX_MODULE = [
+  InputTextModule,
+  ButtonModule,
+  FormsModule,
+  ReactiveFormsModule,
+  MessageModule,
+];
 @NgModule({
-  imports: [
-    CommonModule,
-    RouterModule.forChild(routes),
-    InputTextModule,
-    ButtonModule,
-    FormsModule,
-    ReactiveFormsModule,
-  ],
+  imports: [CommonModule, RouterModule.forChild(routes), ...UX_MODULE],
   declarations: [LoginComponent],
+  providers: [MessageService],
 })
 export class UsersModule {}
