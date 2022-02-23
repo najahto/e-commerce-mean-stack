@@ -1,5 +1,5 @@
 import { Location } from '@angular/common';
-import { Component, OnInit } from '@angular/core';
+import { Component, OnDestroy, OnInit } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { ActivatedRoute } from '@angular/router';
 import { environment } from '@frontend/admin/environments';
@@ -10,14 +10,14 @@ import {
   ProductsService,
 } from '@frontend/products';
 import { MessageService } from 'primeng/api';
-import { timer } from 'rxjs';
+import { Subject, takeUntil, timer } from 'rxjs';
 
 @Component({
   selector: 'admin-products-form',
   templateUrl: './products-form.component.html',
   styleUrls: ['./products-form.component.scss'],
 })
-export class ProductsFormComponent implements OnInit {
+export class ProductsFormComponent implements OnInit, OnDestroy {
   form: FormGroup;
   isSubmitted = false;
   editMode = false;
@@ -25,6 +25,7 @@ export class ProductsFormComponent implements OnInit {
   catagories: Category[] = [];
   imageDisplay: string | ArrayBuffer | undefined | null;
   host = environment.host;
+  endSubscription$: Subject<boolean> = new Subject<boolean>();
 
   constructor(
     private formBuilder: FormBuilder,
@@ -93,31 +94,35 @@ export class ProductsFormComponent implements OnInit {
   }
 
   private _createProduct(productData: FormData) {
-    this.productsService.createProduct(productData).subscribe(
-      (res) => {
-        this.messageService.add({
-          severity: 'success',
-          summary: 'Success',
-          detail: 'Product created successfully',
-        });
-        timer(2000).subscribe(() => {
-          this.location.back();
-        });
-      },
-      (error) => {
-        this.messageService.add({
-          severity: 'error',
-          summary: 'Error',
-          detail: 'Product is not created!',
-        });
-        console.log('error', error);
-      }
-    );
+    this.productsService
+      .createProduct(productData)
+      .pipe(takeUntil(this.endSubscription$))
+      .subscribe(
+        (res) => {
+          this.messageService.add({
+            severity: 'success',
+            summary: 'Success',
+            detail: 'Product created successfully',
+          });
+          timer(2000).subscribe(() => {
+            this.location.back();
+          });
+        },
+        (error) => {
+          this.messageService.add({
+            severity: 'error',
+            summary: 'Error',
+            detail: 'Product is not created!',
+          });
+          console.log('error', error);
+        }
+      );
   }
 
   private _updateProduct(productData: FormData) {
     this.productsService
       .editProduct(this.currentProductId, productData)
+      .pipe(takeUntil(this.endSubscription$))
       .subscribe(
         () => {
           this.messageService.add({
@@ -166,8 +171,16 @@ export class ProductsFormComponent implements OnInit {
   }
 
   private _getCategories() {
-    return this.categoriesService.getCategories().subscribe((categories) => {
-      this.catagories = categories;
-    });
+    return this.categoriesService
+      .getCategories()
+      .pipe(takeUntil(this.endSubscription$))
+      .subscribe((categories) => {
+        this.catagories = categories;
+      });
+  }
+
+  ngOnDestroy(): void {
+    this.endSubscription$.next(true);
+    this.endSubscription$.complete();
   }
 }

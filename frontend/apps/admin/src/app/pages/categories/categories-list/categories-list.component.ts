@@ -1,15 +1,17 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnDestroy, OnInit } from '@angular/core';
 import { Router } from '@angular/router';
 import { CategoriesService, Category } from '@frontend/products';
 import { ConfirmationService, MessageService } from 'primeng/api';
+import { Subject, takeUntil } from 'rxjs';
 
 @Component({
   selector: 'admin-categories-list',
   templateUrl: './categories-list.component.html',
   styleUrls: ['./categories-list.component.scss'],
 })
-export class CategoriesListComponent implements OnInit {
+export class CategoriesListComponent implements OnInit, OnDestroy {
   categories: Category[] = [];
+  endSubscription$: Subject<boolean> = new Subject<boolean>();
 
   constructor(
     private categoriesService: CategoriesService,
@@ -32,25 +34,28 @@ export class CategoriesListComponent implements OnInit {
       header: 'Delete Confirmation',
       icon: 'pi pi-info-circle',
       accept: () => {
-        this.categoriesService.deleteCategory(id).subscribe(
-          (res) => {
-            this._getCategories();
-            this.messageService.add({
-              severity: 'info',
-              summary: 'Confirmed',
-              detail: 'Category deleted',
-            });
-            console.log('response', res);
-          },
-          (error) => {
-            this.messageService.add({
-              severity: 'error',
-              summary: 'Error',
-              detail: 'Category is not deleted!',
-            });
-            console.log('error', error);
-          }
-        );
+        this.categoriesService
+          .deleteCategory(id)
+          .pipe(takeUntil(this.endSubscription$))
+          .subscribe(
+            (res) => {
+              this._getCategories();
+              this.messageService.add({
+                severity: 'info',
+                summary: 'Confirmed',
+                detail: 'Category deleted',
+              });
+              console.log('response', res);
+            },
+            (error) => {
+              this.messageService.add({
+                severity: 'error',
+                summary: 'Error',
+                detail: 'Category is not deleted!',
+              });
+              console.log('error', error);
+            }
+          );
       },
       reject: () => {
         this.messageService.add({
@@ -65,8 +70,16 @@ export class CategoriesListComponent implements OnInit {
   confirmDelete() {}
 
   private _getCategories() {
-    this.categoriesService.getCategories().subscribe((data) => {
-      this.categories = data;
-    });
+    this.categoriesService
+      .getCategories()
+      .pipe(takeUntil(this.endSubscription$))
+      .subscribe((data) => {
+        this.categories = data;
+      });
+  }
+
+  ngOnDestroy(): void {
+    this.endSubscription$.next(true);
+    this.endSubscription$.complete();
   }
 }

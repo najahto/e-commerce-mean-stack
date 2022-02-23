@@ -1,7 +1,8 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnDestroy, OnInit } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
 import { Order, OrdersService } from '@frontend/orders';
 import { MessageService } from 'primeng/api';
+import { Subject, takeUntil } from 'rxjs';
 import { OrderStatus } from '../order-status.type';
 import { ORDER_STATUS } from '../order.constants';
 
@@ -10,10 +11,11 @@ import { ORDER_STATUS } from '../order.constants';
   templateUrl: './orders-detail.component.html',
   styleUrls: ['./orders-detail.component.scss'],
 })
-export class OrdersDetailComponent implements OnInit {
+export class OrdersDetailComponent implements OnInit, OnDestroy {
   order: Order;
   orderStatuses = [];
   selectedStatus: string;
+  endSubscription$: Subject<boolean> = new Subject<boolean>();
 
   constructor(
     private ordersService: OrdersService,
@@ -29,6 +31,7 @@ export class OrdersDetailComponent implements OnInit {
   onStatusChange(event) {
     this.ordersService
       .editOrder(this.order.id, { status: event.value })
+      .pipe(takeUntil(this.endSubscription$))
       .subscribe(
         () => {
           this.messageService.add({
@@ -50,14 +53,13 @@ export class OrdersDetailComponent implements OnInit {
   private _getOrder() {
     this.route.params.subscribe((params) => {
       if (params['id']) {
-        this.ordersService.findOrder(params['id']).subscribe((order) => {
-          this.order = order;
-          console.log(
-            '🚀 ~ file: orders-detail.component.ts ~ line 32 ~ OrdersDetailComponent ~ this.ordersService.findOrder ~ order',
-            order
-          );
-          this.selectedStatus = order.status;
-        });
+        this.ordersService
+          .findOrder(params['id'])
+          .pipe(takeUntil(this.endSubscription$))
+          .subscribe((order) => {
+            this.order = order;
+            this.selectedStatus = order.status;
+          });
       }
     });
   }
@@ -69,5 +71,10 @@ export class OrdersDetailComponent implements OnInit {
         name: ORDER_STATUS[key].label,
       };
     });
+  }
+
+  ngOnDestroy(): void {
+    this.endSubscription$.next(true);
+    this.endSubscription$.complete();
   }
 }

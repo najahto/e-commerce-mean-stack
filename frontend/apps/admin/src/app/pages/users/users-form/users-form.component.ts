@@ -1,23 +1,23 @@
 import { Location } from '@angular/common';
-import { Component, OnInit } from '@angular/core';
+import { Component, OnDestroy, OnInit } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { ActivatedRoute } from '@angular/router';
 import { User, UsersService } from '@frontend/users';
 import { MessageService } from 'primeng/api';
-import { timer } from 'rxjs';
+import { Subject, takeUntil, timer } from 'rxjs';
 
 @Component({
   selector: 'admin-users-form',
   templateUrl: './users-form.component.html',
   styleUrls: ['./users-form.component.scss'],
 })
-export class UsersFormComponent implements OnInit {
+export class UsersFormComponent implements OnInit, OnDestroy {
   form: FormGroup;
   editMode = false;
   isSubmitted = false;
   currentUserId: string;
   countries: any = [];
-
+  endSubscription$: Subject<boolean> = new Subject<boolean>();
   constructor(
     private messageService: MessageService,
     private formBuilder: FormBuilder,
@@ -109,50 +109,61 @@ export class UsersFormComponent implements OnInit {
   }
 
   private _createUser(user: User) {
-    this.usersService.createUser(user).subscribe(
-      (res) => {
-        this.messageService.add({
-          severity: 'success',
-          summary: 'Success',
-          detail: 'User created successfully',
-        });
-        timer(2000).subscribe(() => {
-          this.location.back();
-        });
-      },
-      (error) => {
-        this.messageService.add({
-          severity: 'error',
-          summary: 'Error',
-          detail: 'User is not created!',
-        });
-      }
-    );
+    this.usersService
+      .createUser(user)
+      .pipe(takeUntil(this.endSubscription$))
+      .subscribe(
+        (res) => {
+          this.messageService.add({
+            severity: 'success',
+            summary: 'Success',
+            detail: 'User created successfully',
+          });
+          timer(2000).subscribe(() => {
+            this.location.back();
+          });
+        },
+        (error) => {
+          this.messageService.add({
+            severity: 'error',
+            summary: 'Error',
+            detail: 'User is not created!',
+          });
+        }
+      );
   }
 
   private _updateUser(user: User) {
-    this.usersService.editUser(this.currentUserId, user).subscribe(
-      () => {
-        this.messageService.add({
-          severity: 'success',
-          summary: 'Success',
-          detail: 'User is updated!',
-        });
-        timer(2000).subscribe(() => {
-          this.location.back();
-        });
-      },
-      () => {
-        this.messageService.add({
-          severity: 'error',
-          summary: 'Error',
-          detail: 'User is not updated!',
-        });
-      }
-    );
+    this.usersService
+      .editUser(this.currentUserId, user)
+      .pipe(takeUntil(this.endSubscription$))
+      .subscribe(
+        () => {
+          this.messageService.add({
+            severity: 'success',
+            summary: 'Success',
+            detail: 'User is updated!',
+          });
+          timer(2000).subscribe(() => {
+            this.location.back();
+          });
+        },
+        () => {
+          this.messageService.add({
+            severity: 'error',
+            summary: 'Error',
+            detail: 'User is not updated!',
+          });
+        }
+      );
   }
 
   onCancel() {
     this.location.back();
+  }
+
+  ngOnDestroy(): void {
+    this.endSubscription$.next(true);
+    this.endSubscription$.complete();
   }
 }

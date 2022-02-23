@@ -1,21 +1,22 @@
 import { Location } from '@angular/common';
-import { Component, OnInit } from '@angular/core';
+import { Component, OnDestroy, OnInit } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { ActivatedRoute } from '@angular/router';
 import { CategoriesService, Category } from '@frontend/products';
 import { MessageService } from 'primeng/api';
-import { timer } from 'rxjs';
+import { Subject, takeUntil, timer } from 'rxjs';
 
 @Component({
   selector: 'admin-categories-form',
   templateUrl: './categories-form.component.html',
   styleUrls: ['./categories-form.component.scss'],
 })
-export class CategoriesFormComponent implements OnInit {
+export class CategoriesFormComponent implements OnInit, OnDestroy {
   form: FormGroup;
   isSubmitted = false;
   editMode = false;
   currentCategoryId: string;
+  endSubscription$: Subject<boolean> = new Subject<boolean>();
 
   constructor(
     private formBuilder: FormBuilder,
@@ -59,31 +60,35 @@ export class CategoriesFormComponent implements OnInit {
   }
 
   private _createCategory(category: Category) {
-    this.categoriesService.createCategory(category).subscribe(
-      (res) => {
-        this.messageService.add({
-          severity: 'success',
-          summary: 'Success',
-          detail: 'Category created successfully',
-        });
-        timer(2000).subscribe(() => {
-          this.location.back();
-        });
-      },
-      (error) => {
-        this.messageService.add({
-          severity: 'error',
-          summary: 'Error',
-          detail: 'Category is not created!',
-        });
-        console.log('error', error);
-      }
-    );
+    this.categoriesService
+      .createCategory(category)
+      .pipe(takeUntil(this.endSubscription$))
+      .subscribe(
+        (res) => {
+          this.messageService.add({
+            severity: 'success',
+            summary: 'Success',
+            detail: 'Category created successfully',
+          });
+          timer(2000).subscribe(() => {
+            this.location.back();
+          });
+        },
+        (error) => {
+          this.messageService.add({
+            severity: 'error',
+            summary: 'Error',
+            detail: 'Category is not created!',
+          });
+          console.log('error', error);
+        }
+      );
   }
 
   private _updateCategory(category: Category) {
     this.categoriesService
       .editCategory(this.currentCategoryId, category)
+      .pipe(takeUntil(this.endSubscription$))
       .subscribe(
         (res) => {
           this.messageService.add({
@@ -120,5 +125,10 @@ export class CategoriesFormComponent implements OnInit {
           });
       }
     });
+  }
+
+  ngOnDestroy(): void {
+    this.endSubscription$.next(true);
+    this.endSubscription$.complete();
   }
 }

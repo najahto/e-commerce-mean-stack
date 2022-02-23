@@ -1,15 +1,17 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnDestroy, OnInit } from '@angular/core';
 import { Router } from '@angular/router';
 import { User, UsersService } from '@frontend/users';
 import { ConfirmationService, MessageService } from 'primeng/api';
+import { Subject, takeUntil } from 'rxjs';
 
 @Component({
   selector: 'admin-users-list',
   templateUrl: './users-list.component.html',
   styleUrls: ['./users-list.component.scss'],
 })
-export class UsersListComponent implements OnInit {
+export class UsersListComponent implements OnInit, OnDestroy {
   users: User[] = [];
+  endSubscription$: Subject<boolean> = new Subject<boolean>();
 
   constructor(
     private usersService: UsersService,
@@ -38,23 +40,26 @@ export class UsersListComponent implements OnInit {
       header: 'Delete Confirmation',
       icon: 'pi pi-info-circle',
       accept: () => {
-        this.usersService.deleteUser(id).subscribe(
-          () => {
-            this._getUsers();
-            this.messageService.add({
-              severity: 'info',
-              summary: 'Confirmed',
-              detail: 'User deleted',
-            });
-          },
-          () => {
-            this.messageService.add({
-              severity: 'error',
-              summary: 'Error',
-              detail: 'User is not deleted!',
-            });
-          }
-        );
+        this.usersService
+          .deleteUser(id)
+          .pipe(takeUntil(this.endSubscription$))
+          .subscribe(
+            () => {
+              this._getUsers();
+              this.messageService.add({
+                severity: 'info',
+                summary: 'Confirmed',
+                detail: 'User deleted',
+              });
+            },
+            () => {
+              this.messageService.add({
+                severity: 'error',
+                summary: 'Error',
+                detail: 'User is not deleted!',
+              });
+            }
+          );
       },
       reject: () => {
         this.messageService.add({
@@ -67,8 +72,16 @@ export class UsersListComponent implements OnInit {
   }
 
   private _getUsers() {
-    this.usersService.getUsers().subscribe((users) => {
-      this.users = users;
-    });
+    this.usersService
+      .getUsers()
+      .pipe(takeUntil(this.endSubscription$))
+      .subscribe((users) => {
+        this.users = users;
+      });
+  }
+
+  ngOnDestroy(): void {
+    this.endSubscription$.next(true);
+    this.endSubscription$.complete();
   }
 }
