@@ -1,1 +1,49 @@
-dashboard
+<div class="admin-page"></div>
+<p-card header="Dashboard" subheader="Latest Updates">
+    <div class="grid">
+        <div class="col-3">
+            <p-card styleClass="d-orders">
+                <div class="d-item flex flex-row justify-content-between align-items-center">
+                    <div class="flex flex-column justify-content-center align-items-start">
+                        <i class="pi pi-shopping-cart"></i>
+                        <span class="label">Orders</span>
+                    </div>
+                    <span class="number">{{ statistics[0] }}</span>
+                </div>
+            </p-card>
+        </div>
+        <div class="col-3">
+            <p-card styleClass="d-products">
+                <div class="d-item flex flex-row justify-content-between align-items-center">
+                    <div class="flex flex-column justify-content-center align-items-start">
+                        <i class="pi pi-briefcase"></i>
+                        <span class="label">Products</span>
+                    </div>
+                    <span class="number">{{ statistics[1] }}</span>
+                </div>
+            </p-card>
+        </div>
+        <div class="col-3">
+            <p-card styleClass="d-total-sales">
+                <div class="d-item flex flex-row justify-content-between align-items-center">
+                    <div class="flex flex-column justify-content-center align-items-start">
+                        <i class="pi pi-dollar"></i>
+                        <span class="label"> Total sales</span>
+                    </div>
+                    <span class="number">{{ statistics[2] }}</span>
+                </div>
+            </p-card>
+        </div>
+        <div class="col-3">
+            <p-card styleClass="d-users">
+                <div class="d-item flex flex-row justify-content-between align-items-center">
+                    <div class="flex flex-column justify-content-center align-items-start">
+                        <i class="pi pi-users"></i>
+                        <span class="label">Users</span>
+                    </div>
+                    <span class="number">{{ statistics[3] }}</span>
+                </div>
+            </p-card>
+        </div>
+    </div>
+</p-card>

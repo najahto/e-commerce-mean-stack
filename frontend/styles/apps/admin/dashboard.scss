@@ -1,0 +1,109 @@
+.d-item {
+  display: flex;
+  align-items: center;
+  color: white;
+
+  .pi {
+    font-size: 3em;
+    margin-bottom: 15px;
+  }
+  .label {
+    font-size: 1.4em;
+  }
+
+  .number {
+    font-size: 2em;
+  }
+}
+
+.d-orders {
+  background-image: linear-gradient(
+    to right,
+    #4776e6 0%,
+    #8e54e9 51%,
+    #4776e6 100%
+  );
+}
+.d-orders {
+  margin: 5px;
+  padding: 15px 45px;
+
+  transition: 0.5s;
+  background-size: 200% auto;
+  box-shadow: 0 0 20px #eee;
+}
+
+.d-orders:hover {
+  background-position: right center;
+  text-decoration: none;
+}
+
+.d-products {
+  background-image: linear-gradient(
+    to right,
+    #eb3349 0%,
+    #f45c43 51%,
+    #eb3349 100%
+  );
+}
+.d-products {
+  margin: 5px;
+  padding: 15px 45px;
+
+  transition: 0.5s;
+  background-size: 200% auto;
+  color: white;
+  box-shadow: 0 0 20px #eee;
+}
+
+.d-products:hover {
+  background-position: right center;
+  text-decoration: none;
+}
+
+.d-total-sales {
+  background-image: linear-gradient(
+    to right,
+    #4cb8c4 0%,
+    #3cd3ad 51%,
+    #4cb8c4 100%
+  );
+}
+.d-total-sales {
+  margin: 5px;
+  padding: 15px 45px;
+
+  transition: 0.5s;
+  background-size: 200% auto;
+  box-shadow: 0 0 20px #eee;
+}
+
+.d-total-sales:hover {
+  background-position: right center; /* change the direction of the change here */
+  text-decoration: none;
+}
+
+.d-users {
+  background-image: linear-gradient(
+    to right,
+    #6190e8 0%,
+    #a7bfe8 51%,
+    #6190e8 100%
+  );
+}
+.d-users {
+  margin: 5px;
+  padding: 15px 45px;
+  text-align: center;
+  transition: 0.5s;
+  background-size: 200% auto;
+  box-shadow: 0 0 20px #eee;
+}
+
+.d-users:hover {
+  background-position: right center; /* change the direction of the change here */
+  text-decoration: none;
+}
+
+
+
