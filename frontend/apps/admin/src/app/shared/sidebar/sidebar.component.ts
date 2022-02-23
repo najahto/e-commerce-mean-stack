@@ -12,9 +12,6 @@ export class SidebarComponent implements OnInit {
   ngOnInit(): void {}
 
   logout() {
-    console.log(
-      '🚀 ~ file: sidebar.component.ts ~ line 15 ~ SidebarComponent ~ logout ~ logout'
-    );
     this.authService.logout();
   }
 }
