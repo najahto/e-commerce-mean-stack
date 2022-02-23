@@ -31,7 +31,42 @@ export class OrdersListComponent implements OnInit, OnDestroy {
     this.router.navigateByUrl(`orders/${id}`);
   }
 
-  deleteOrder(id: string) {}
+  deleteOrder(id: string) {
+    this.confirmationService.confirm({
+      message: 'Do you want to delete this product?',
+      header: 'Delete Confirmation',
+      icon: 'pi pi-info-circle',
+      accept: () => {
+        this.ordersService
+          .deleteOrder(id)
+          .pipe(takeUntil(this.endSubscription$))
+          .subscribe(
+            () => {
+              this._getOrders();
+              this.messageService.add({
+                severity: 'info',
+                summary: 'Confirmed',
+                detail: 'Order deleted',
+              });
+            },
+            () => {
+              this.messageService.add({
+                severity: 'error',
+                summary: 'Error',
+                detail: 'Order is not deleted!',
+              });
+            }
+          );
+      },
+      reject: () => {
+        this.messageService.add({
+          severity: 'warn',
+          summary: 'Cancelled',
+          detail: 'You have cancelled',
+        });
+      },
+    });
+  }
 
   private _getOrders() {
     this.ordersService
