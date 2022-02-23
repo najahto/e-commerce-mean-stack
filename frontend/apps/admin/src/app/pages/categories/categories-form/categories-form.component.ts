@@ -35,7 +35,7 @@ export class CategoriesFormComponent implements OnInit, OnDestroy {
     this._checkEditMode();
   }
 
-  public onSubmit() {
+  onSubmit() {
     this.isSubmitted = true;
     if (this.form.invalid) {
       return;
@@ -53,6 +53,10 @@ export class CategoriesFormComponent implements OnInit, OnDestroy {
 
     console.log('data name', this.form.controls['name'].value);
     console.log('data', this.form.controls['icon'].value);
+  }
+
+  onCancel() {
+    this.location.back();
   }
 
   get categoryForm() {
