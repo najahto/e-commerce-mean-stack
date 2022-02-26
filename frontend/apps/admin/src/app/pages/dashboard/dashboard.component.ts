@@ -27,8 +27,10 @@ export class DashboardComponent implements OnInit, OnDestroy {
       this.usersService.getUsersCount(),
     ])
       .pipe(takeUntil(this.endSubscription$))
-      .subscribe((res) => {
-        this.statistics = res;
+      .subscribe({
+        next: (res) => {
+          this.statistics = res;
+        },
       });
   }
 

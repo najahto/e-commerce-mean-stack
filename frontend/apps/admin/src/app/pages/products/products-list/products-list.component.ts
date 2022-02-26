@@ -39,25 +39,23 @@ export class ProductsListComponent implements OnInit, OnDestroy {
         this.productsService
           .deleteProduct(id)
           .pipe(takeUntil(this.endSubscription$))
-          .subscribe(
-            (res) => {
+          .subscribe({
+            complete: () => {
               this._getProducts();
               this.messageService.add({
                 severity: 'info',
                 summary: 'Confirmed',
                 detail: 'Product deleted',
               });
-              console.log('response', res);
             },
-            (error) => {
+            error: () => {
               this.messageService.add({
                 severity: 'error',
                 summary: 'Error',
                 detail: 'Product is not deleted!',
               });
-              console.log('error', error);
-            }
-          );
+            },
+          });
       },
       reject: () => {
         this.messageService.add({
@@ -73,8 +71,10 @@ export class ProductsListComponent implements OnInit, OnDestroy {
     this.productsService
       .getProducts()
       .pipe(takeUntil(this.endSubscription$))
-      .subscribe((products) => {
-        this.products = products;
+      .subscribe({
+        next: (products) => {
+          this.products = products;
+        },
       });
   }
 

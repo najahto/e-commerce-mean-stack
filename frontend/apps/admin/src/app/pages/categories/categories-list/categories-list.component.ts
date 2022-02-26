@@ -37,25 +37,23 @@ export class CategoriesListComponent implements OnInit, OnDestroy {
         this.categoriesService
           .deleteCategory(id)
           .pipe(takeUntil(this.endSubscription$))
-          .subscribe(
-            (res) => {
+          .subscribe({
+            next: () => {
               this._getCategories();
               this.messageService.add({
                 severity: 'info',
                 summary: 'Confirmed',
                 detail: 'Category deleted',
               });
-              console.log('response', res);
             },
-            (error) => {
+            error: () => {
               this.messageService.add({
                 severity: 'error',
                 summary: 'Error',
                 detail: 'Category is not deleted!',
               });
-              console.log('error', error);
-            }
-          );
+            },
+          });
       },
       reject: () => {
         this.messageService.add({
@@ -73,8 +71,10 @@ export class CategoriesListComponent implements OnInit, OnDestroy {
     this.categoriesService
       .getCategories()
       .pipe(takeUntil(this.endSubscription$))
-      .subscribe((data) => {
-        this.categories = data;
+      .subscribe({
+        next: (data) => {
+          this.categories = data;
+        },
       });
   }
 

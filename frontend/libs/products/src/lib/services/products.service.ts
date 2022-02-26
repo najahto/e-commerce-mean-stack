@@ -16,19 +16,35 @@ export class ProductsService {
     return this.http.get<Product[]>(`${this.baseUrl}/products`);
   }
 
-  createProduct(productData: FormData): Observable<Product> {
-    return this.http.post<Product>(`${this.baseUrl}/products`, productData);
+  createProduct(productData: FormData): Observable<{
+    success: boolean;
+    message: string;
+    product: Product;
+  }> {
+    return this.http.post<{
+      success: boolean;
+      message: string;
+      product: Product;
+    }>(`${this.baseUrl}/products`, productData);
   }
 
   findProduct(id: string): Observable<Product> {
     return this.http.get<Product>(`${this.baseUrl}/products/${id}`);
   }
 
-  editProduct(id: string, productData: FormData): Observable<Product> {
-    return this.http.put<Product>(
-      `${this.baseUrl}/products/${id}`,
-      productData
-    );
+  editProduct(
+    id: string,
+    productData: FormData
+  ): Observable<{
+    success: boolean;
+    message: string;
+    product: Product;
+  }> {
+    return this.http.put<{
+      success: boolean;
+      message: string;
+      product: Product;
+    }>(`${this.baseUrl}/products/${id}`, productData);
   }
 
   deleteProduct(id: string): Observable<any> {

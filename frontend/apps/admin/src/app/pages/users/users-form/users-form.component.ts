@@ -86,23 +86,21 @@ export class UsersFormComponent implements OnInit, OnDestroy {
       if (params['id']) {
         this.editMode = true;
         this.currentUserId = params['id'];
-        this.usersService.findUser(params['id']).subscribe((user) => {
-          console.log(
-            '🚀 ~ file: users-form.component.ts ~ line 96 ~ UsersFormComponent ~ this.usersService.findUser ~ user',
-            user
-          );
-          this.userForm['name'].setValue(user.name);
-          this.userForm['email'].setValue(user.email);
-          this.userForm['phone'].setValue(user.phone);
-          this.userForm['isAdmin'].setValue(user.isAdmin);
-          this.userForm['street'].setValue(user.street);
-          this.userForm['apartment'].setValue(user.apartment);
-          this.userForm['zip'].setValue(user.zip);
-          this.userForm['city'].setValue(user.city);
-          this.userForm['country'].setValue(user.country);
+        this.usersService.findUser(params['id']).subscribe({
+          next: (user) => {
+            this.userForm['name'].setValue(user.name);
+            this.userForm['email'].setValue(user.email);
+            this.userForm['phone'].setValue(user.phone);
+            this.userForm['isAdmin'].setValue(user.isAdmin);
+            this.userForm['street'].setValue(user.street);
+            this.userForm['apartment'].setValue(user.apartment);
+            this.userForm['zip'].setValue(user.zip);
+            this.userForm['city'].setValue(user.city);
+            this.userForm['country'].setValue(user.country);
 
-          this.userForm['password'].setValidators([]);
-          this.userForm['password'].updateValueAndValidity();
+            this.userForm['password'].setValidators([]);
+            this.userForm['password'].updateValueAndValidity();
+          },
         });
       }
     });
@@ -112,50 +110,56 @@ export class UsersFormComponent implements OnInit, OnDestroy {
     this.usersService
       .createUser(user)
       .pipe(takeUntil(this.endSubscription$))
-      .subscribe(
-        (res) => {
+      .subscribe({
+        next: () => {
           this.messageService.add({
             severity: 'success',
             summary: 'Success',
             detail: 'User created successfully',
           });
-          timer(2000).subscribe(() => {
-            this.location.back();
-          });
         },
-        (error) => {
+        error: () => {
           this.messageService.add({
             severity: 'error',
             summary: 'Error',
             detail: 'User is not created!',
           });
-        }
-      );
+        },
+        complete: () => {
+          timer(2000).subscribe({
+            complete: () => {
+              this.location.back();
+            },
+          });
+        },
+      });
   }
 
   private _updateUser(user: User) {
     this.usersService
       .editUser(this.currentUserId, user)
       .pipe(takeUntil(this.endSubscription$))
-      .subscribe(
-        () => {
+      .subscribe({
+        complete: () => {
           this.messageService.add({
             severity: 'success',
             summary: 'Success',
             detail: 'User is updated!',
           });
-          timer(2000).subscribe(() => {
-            this.location.back();
+          timer(2000).subscribe({
+            next: () => {
+              this.location.back();
+            },
           });
         },
-        () => {
+        error: () => {
           this.messageService.add({
             severity: 'error',
             summary: 'Error',
             detail: 'User is not updated!',
           });
-        }
-      );
+        },
+      });
   }
 
   onCancel() {

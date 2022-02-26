@@ -44,22 +44,24 @@ export class LoginComponent implements OnInit {
 
     this.authService
       .login(this.loginForm['email'].value, this.loginForm['password'].value)
-      .subscribe(
-        (user) => {
+      .subscribe({
+        next: (user) => {
           this.localStorageService.setToken(user.token);
-          this.authMessageSeverity = 'success';
-          this.authMessage = 'Success! Your account now logged in.';
-          this.router.navigate(['/']);
         },
-        (error: HttpErrorResponse) => {
+        error: (error: HttpErrorResponse) => {
           this.isLoading = false;
           this.authMessageSeverity = 'error';
           this.authMessage = 'Incorrect email or password';
           if (error.status != 400) {
             this.authMessage = 'Error in the server, please try again later';
           }
-        }
-      );
+        },
+        complete: () => {
+          this.authMessageSeverity = 'success';
+          this.authMessage = 'Success! Your account now logged in.';
+          this.router.navigate(['/']);
+        },
+      });
   }
 
   private _initForm() {

@@ -40,8 +40,8 @@ export class OrdersListComponent implements OnInit, OnDestroy {
         this.ordersService
           .deleteOrder(id)
           .pipe(takeUntil(this.endSubscription$))
-          .subscribe(
-            () => {
+          .subscribe({
+            complete: () => {
               this._getOrders();
               this.messageService.add({
                 severity: 'info',
@@ -49,14 +49,14 @@ export class OrdersListComponent implements OnInit, OnDestroy {
                 detail: 'Order deleted',
               });
             },
-            () => {
+            error: () => {
               this.messageService.add({
                 severity: 'error',
                 summary: 'Error',
                 detail: 'Order is not deleted!',
               });
-            }
-          );
+            },
+          });
       },
       reject: () => {
         this.messageService.add({
@@ -72,8 +72,10 @@ export class OrdersListComponent implements OnInit, OnDestroy {
     this.ordersService
       .getOrders()
       .pipe(takeUntil(this.endSubscription$))
-      .subscribe((orders) => {
-        this.orders = orders;
+      .subscribe({
+        next: (orders) => {
+          this.orders = orders;
+        },
       });
   }
 

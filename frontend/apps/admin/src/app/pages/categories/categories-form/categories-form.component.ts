@@ -67,52 +67,56 @@ export class CategoriesFormComponent implements OnInit, OnDestroy {
     this.categoriesService
       .createCategory(category)
       .pipe(takeUntil(this.endSubscription$))
-      .subscribe(
-        (res) => {
+      .subscribe({
+        next: (res) => {
           this.messageService.add({
             severity: 'success',
             summary: 'Success',
-            detail: 'Category created successfully',
-          });
-          timer(2000).subscribe(() => {
-            this.location.back();
+            detail: `Category ${res.category.name} is created successfully`,
           });
         },
-        (error) => {
+        error: () => {
           this.messageService.add({
             severity: 'error',
             summary: 'Error',
             detail: 'Category is not created!',
           });
-          console.log('error', error);
-        }
-      );
+        },
+        complete: () => {
+          timer(2000).subscribe(() => {
+            this.location.back();
+          });
+        },
+      });
   }
 
   private _updateCategory(category: Category) {
     this.categoriesService
       .editCategory(this.currentCategoryId, category)
       .pipe(takeUntil(this.endSubscription$))
-      .subscribe(
-        (res) => {
+      .subscribe({
+        next: (res) => {
           this.messageService.add({
             severity: 'success',
             summary: 'Success',
-            detail: 'Category updated successfully',
-          });
-          timer(2000).subscribe(() => {
-            this.location.back();
+            detail: `Category ${res.category.name} is updated successfully`,
           });
         },
-        (error) => {
+        error: () => {
           this.messageService.add({
             severity: 'error',
             summary: 'Error',
             detail: 'Category is not updated!',
           });
-          console.log('error', error);
-        }
-      );
+        },
+        complete: () => {
+          timer(2000).subscribe({
+            complete: () => {
+              this.location.back();
+            },
+          });
+        },
+      });
   }
 
   private _checkEditMode() {
@@ -120,13 +124,13 @@ export class CategoriesFormComponent implements OnInit, OnDestroy {
       if (params['id']) {
         this.editMode = true;
         this.currentCategoryId = params['id'];
-        this.categoriesService
-          .findCategory(this.currentCategoryId)
-          .subscribe((category) => {
+        this.categoriesService.findCategory(this.currentCategoryId).subscribe({
+          next: (category) => {
             this.categoryForm['name'].setValue(category.name);
             this.categoryForm['icon'].setValue(category.icon);
             this.categoryForm['color'].setValue(category.color);
-          });
+          },
+        });
       }
     });
   }

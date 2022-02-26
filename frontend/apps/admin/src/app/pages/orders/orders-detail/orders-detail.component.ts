@@ -32,22 +32,22 @@ export class OrdersDetailComponent implements OnInit, OnDestroy {
     this.ordersService
       .editOrder(this.order.id, { status: event.value })
       .pipe(takeUntil(this.endSubscription$))
-      .subscribe(
-        () => {
+      .subscribe({
+        complete: () => {
           this.messageService.add({
             severity: 'success',
             summary: 'Success',
             detail: 'Order status updated!',
           });
         },
-        () => {
+        error: () => {
           this.messageService.add({
             severity: 'error',
             summary: 'Error',
             detail: 'Order status is not updated!',
           });
-        }
-      );
+        },
+      });
   }
 
   private _getOrder() {
@@ -56,9 +56,11 @@ export class OrdersDetailComponent implements OnInit, OnDestroy {
         this.ordersService
           .findOrder(params['id'])
           .pipe(takeUntil(this.endSubscription$))
-          .subscribe((order) => {
-            this.order = order;
-            this.selectedStatus = order.status;
+          .subscribe({
+            next: (order) => {
+              this.order = order;
+              this.selectedStatus = order.status;
+            },
           });
       }
     });

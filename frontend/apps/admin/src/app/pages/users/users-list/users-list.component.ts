@@ -43,8 +43,8 @@ export class UsersListComponent implements OnInit, OnDestroy {
         this.usersService
           .deleteUser(id)
           .pipe(takeUntil(this.endSubscription$))
-          .subscribe(
-            () => {
+          .subscribe({
+            complete: () => {
               this._getUsers();
               this.messageService.add({
                 severity: 'info',
@@ -52,14 +52,14 @@ export class UsersListComponent implements OnInit, OnDestroy {
                 detail: 'User deleted',
               });
             },
-            () => {
+            error: () => {
               this.messageService.add({
                 severity: 'error',
                 summary: 'Error',
                 detail: 'User is not deleted!',
               });
-            }
-          );
+            },
+          });
       },
       reject: () => {
         this.messageService.add({
@@ -75,8 +75,10 @@ export class UsersListComponent implements OnInit, OnDestroy {
     this.usersService
       .getUsers()
       .pipe(takeUntil(this.endSubscription$))
-      .subscribe((users) => {
-        this.users = users;
+      .subscribe({
+        next: (users) => {
+          this.users = users;
+        },
       });
   }
 

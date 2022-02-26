@@ -64,7 +64,7 @@ export class ProductsFormComponent implements OnInit, OnDestroy {
   onCancel() {
     this.location.back();
   }
-  
+
   onImageUpload(event: any) {
     const file = event.target.files[0];
     if (file) {
@@ -101,51 +101,58 @@ export class ProductsFormComponent implements OnInit, OnDestroy {
     this.productsService
       .createProduct(productData)
       .pipe(takeUntil(this.endSubscription$))
-      .subscribe(
-        (res) => {
+      .subscribe({
+        next: (res) => {
           this.messageService.add({
             severity: 'success',
             summary: 'Success',
-            detail: 'Product created successfully',
-          });
-          timer(2000).subscribe(() => {
-            this.location.back();
+            detail: `Product ${res.product.name} is created successfully`,
           });
         },
-        (error) => {
+        error: () => {
           this.messageService.add({
             severity: 'error',
             summary: 'Error',
             detail: 'Product is not created!',
           });
-          console.log('error', error);
-        }
-      );
+        },
+        complete: () => {
+          timer(2000).subscribe({
+            complete: () => {
+              this.location.back();
+            },
+          });
+        },
+      });
   }
 
   private _updateProduct(productData: FormData) {
     this.productsService
       .editProduct(this.currentProductId, productData)
       .pipe(takeUntil(this.endSubscription$))
-      .subscribe(
-        () => {
+      .subscribe({
+        next: (res) => {
           this.messageService.add({
             severity: 'success',
             summary: 'Success',
-            detail: 'Product is updated successfully!',
-          });
-          timer(2000).subscribe(() => {
-            this.location.back();
+            detail: `Product ${res.product.name} is updated successfully!`,
           });
         },
-        () => {
+        error: () => {
           this.messageService.add({
             severity: 'error',
             summary: 'Error',
             detail: 'Product is not updated!',
           });
-        }
-      );
+        },
+        complete: () => {
+          timer(2000).subscribe({
+            complete: () => {
+              this.location.back();
+            },
+          });
+        },
+      });
   }
 
   private _checkEditMode() {
