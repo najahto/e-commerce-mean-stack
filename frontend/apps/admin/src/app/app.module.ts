@@ -35,10 +35,9 @@ import { TagModule } from 'primeng/tag';
 import { InputMaskModule } from 'primeng/inputmask';
 import { FieldsetModule } from 'primeng/fieldset';
 
-
-
-import { JwtInterceptor, UsersModule } from '@frontend/users';
+import { AuthGuard, JwtInterceptor, UsersModule } from '@frontend/users';
 import { AppRoutingModule } from './app-routing.module';
+import { RouterModule, Routes } from '@angular/router';
 
 const UX_MODULE = [
   CardModule,
@@ -80,8 +79,8 @@ const UX_MODULE = [
     FormsModule,
     ReactiveFormsModule,
     BrowserAnimationsModule,
-    AppRoutingModule,
     UsersModule,
+    AppRoutingModule,
     ...UX_MODULE,
   ],
   providers: [

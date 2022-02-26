@@ -15,6 +15,7 @@ import { OrdersListComponent } from './pages/orders/orders-list/orders-list.comp
 import { OrdersDetailComponent } from './pages/orders/orders-detail/orders-detail.component';
 
 import { AuthGuard } from '@frontend/users';
+import { CommonModule } from '@angular/common';
 
 const routes: Routes = [
   {
@@ -81,10 +82,10 @@ const routes: Routes = [
 
 @NgModule({
   imports: [
+    CommonModule,
     RouterModule.forRoot(routes, { initialNavigation: 'enabledBlocking' }),
   ],
   exports: [RouterModule],
   declarations: [],
-  providers: [],
 })
 export class AppRoutingModule {}
