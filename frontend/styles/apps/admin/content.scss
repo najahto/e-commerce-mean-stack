@@ -47,6 +47,11 @@
             color: white;
           }
 
+          &.is-active {
+            background-color: #3d59bd;
+            color: white;
+          }
+
           i {
             margin-right: 8px;
             margin-top: 0;
@@ -77,7 +82,7 @@
         width: 120px;
       }
     }
-    .total-price{
+    .total-price {
       color: green;
     }
   }

@@ -5,19 +5,24 @@
     <div class="links">
         <ul>
             <li>
-                <a routerLink="/" href="#"><i class="pi pi-chart-bar"></i> Dashboard</a>
+                <a routerLink="/" [routerLinkActive]="'is-active'" [routerLinkActiveOptions]="{ exact: true }"
+                    href="#"><i class="pi pi-chart-bar"></i>
+                    Dashboard</a>
             </li>
             <li>
-                <a routerLink="/categories" href="#"><i class="pi pi-list"></i> Categories</a>
+                <a routerLink="/categories" [routerLinkActive]="'is-active'" href="#"><i class="pi pi-list"></i>
+                    Categories</a>
             </li>
             <li>
-                <a routerLink="/products" href="#"><i class="pi pi-briefcase"></i> Products</a>
+                <a routerLink="/products" [routerLinkActive]="'is-active'" href="#"><i class="pi pi-briefcase"></i>
+                    Products</a>
             </li>
             <li>
-                <a routerLink="/orders" href="#"><i class="pi pi-shopping-cart"></i> Orders</a>
+                <a routerLink="/orders" [routerLinkActive]="'is-active'" href="#"><i class="pi pi-shopping-cart"></i>
+                    Orders</a>
             </li>
             <li>
-                <a routerLink="/users" href="#"><i class="pi pi-users"></i> Users</a>
+                <a routerLink="/users" [routerLinkActive]="'is-active'" href="#"><i class="pi pi-users"></i> Users</a>
             </li>
             <li>
                 <a class="logout" (click)="logout()" href="#"><i class="pi pi-sign-out"></i> Logout</a>
