@@ -1,0 +1,16 @@
+header {
+  .logo {
+    img {
+      width: 130px;
+    }
+  }
+  .utility-icons {
+    .pi {
+      color: $secondary-color;
+      cursor: pointer;
+      &:hover {
+        color: $primary-color;
+      }
+    }
+  }
+}

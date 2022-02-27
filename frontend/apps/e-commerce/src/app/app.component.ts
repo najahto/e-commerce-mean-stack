@@ -1,7 +1,7 @@
 import { Component } from '@angular/core';
 
 @Component({
-  selector: 'frontend-root',
+  selector: 'shop-root',
   templateUrl: './app.component.html',
 })
 export class AppComponent {
