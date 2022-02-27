@@ -10,6 +10,7 @@ import { HomePageComponent } from './pages/home-page/home-page.component';
 import { ProductListComponent } from './pages/product-list/product-list.component';
 import { NavComponent } from './shared/nav/nav.component';
 import { ProductsModule } from '@frontend/products';
+import { UiModule } from '@frontend/ui';
 
 const routes: Routes = [
   {
@@ -33,6 +34,7 @@ const routes: Routes = [
     BrowserAnimationsModule,
     RouterModule.forRoot(routes),
     ProductsModule,
+    UiModule,
   ],
   providers: [],
   bootstrap: [AppComponent],

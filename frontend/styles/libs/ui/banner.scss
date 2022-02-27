@@ -1,0 +1,32 @@
+.banner {
+  height: 250px;
+  width: 100%;
+  background-color: #dbe4ff;
+  border-radius: 15px;
+  h1 {
+    font-size: 2em;
+    font-weight: 600;
+  }
+  h2 {
+    font-size: 1.7em;
+    font-weight: 400;
+  }
+  .illustration {
+    img {
+      width: 230px;
+      user-select: none;
+    }
+  }
+  &-btn {
+    background-color: white;
+    color: $primary-color;
+    border: 0;
+    border-radius: 13px;
+    height: 45px;
+    &:enabled:hover {
+      background-color: $primary-color;
+      color: white;
+      border: 0;
+    }
+  }
+}
