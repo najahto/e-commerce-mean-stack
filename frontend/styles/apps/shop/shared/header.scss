@@ -8,6 +8,7 @@ header {
     .pi {
       color: $secondary-color;
       cursor: pointer;
+      font-size: 18px;
       &:hover {
         color: $primary-color;
       }

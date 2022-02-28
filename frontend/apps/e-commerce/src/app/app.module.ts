@@ -11,6 +11,7 @@ import { ProductListComponent } from './pages/product-list/product-list.componen
 import { NavComponent } from './shared/nav/nav.component';
 import { ProductsModule } from '@frontend/products';
 import { UiModule } from '@frontend/ui';
+import { HttpClientModule } from '@angular/common/http';
 
 const routes: Routes = [
   {
@@ -33,6 +34,7 @@ const routes: Routes = [
     BrowserModule,
     BrowserAnimationsModule,
     RouterModule.forRoot(routes),
+    HttpClientModule,
     ProductsModule,
     UiModule,
   ],
