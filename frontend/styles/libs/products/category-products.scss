@@ -1,0 +1,12 @@
+.products-page {
+  .category h1 {
+    color: $secondary-color;
+    font-size: 1.3em;
+    font-weight: 600;
+  }
+  .all-products {
+    font-size: 14px;
+    color: $primary-color;
+    text-decoration: underline;
+  }
+}

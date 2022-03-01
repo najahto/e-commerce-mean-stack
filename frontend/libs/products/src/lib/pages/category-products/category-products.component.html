@@ -1,0 +1,17 @@
+<div class="products-page mt-5">
+    <div class="category" *ngIf="category">
+        <h1>Category : {{category.name}}</h1>
+    </div>
+
+    <a class="all-products" routerLink="/products" href="#">Show all categories</a>
+
+    <div class="grid">
+        <div class="col">
+            <div class="grid">
+                <div *ngFor="let product of products" class="col-3">
+                    <products-product-item [product]="product"></products-product-item>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
