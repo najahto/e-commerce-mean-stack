@@ -1,5 +1,5 @@
 import { Injectable } from '@angular/core';
-import { HttpClient } from '@angular/common/http';
+import { HttpClient, HttpParams } from '@angular/common/http';
 import { Product } from '../models/product.model';
 import { map, Observable } from 'rxjs';
 import { environment } from '@frontend/admin/environments';
@@ -12,8 +12,12 @@ export class ProductsService {
 
   constructor(private http: HttpClient) {}
 
-  getProducts(): Observable<Product[]> {
-    return this.http.get<Product[]>(`${this.baseUrl}/products`);
+  getProducts(categoriesFilter?: string[]): Observable<Product[]> {
+    let params = new HttpParams();
+    if (categoriesFilter) {
+      params = params.append('categories', categoriesFilter.join(','));
+    }
+    return this.http.get<Product[]>(`${this.baseUrl}/products`, { params });
   }
 
   createProduct(productData: FormData): Observable<{

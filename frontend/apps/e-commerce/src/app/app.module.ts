@@ -7,7 +7,6 @@ import { HeaderComponent } from './shared/header/header.component';
 import { FooterComponent } from './shared/footer/footer.component';
 import { RouterModule, Routes } from '@angular/router';
 import { HomePageComponent } from './pages/home-page/home-page.component';
-import { ProductListComponent } from './pages/product-list/product-list.component';
 import { NavComponent } from './shared/nav/nav.component';
 import { ProductsModule } from '@frontend/products';
 import { UiModule } from '@frontend/ui';
@@ -18,7 +17,6 @@ const routes: Routes = [
     path: '',
     component: HomePageComponent,
   },
-  { path: 'products', component: ProductListComponent },
 ];
 
 @NgModule({
@@ -27,7 +25,6 @@ const routes: Routes = [
     HeaderComponent,
     FooterComponent,
     HomePageComponent,
-    ProductListComponent,
     NavComponent,
   ],
   imports: [
