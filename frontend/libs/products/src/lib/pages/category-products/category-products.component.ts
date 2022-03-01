@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnDestroy, OnInit } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
 import { Subject, takeUntil } from 'rxjs';
 import { Category } from '../../models/category.model';
@@ -11,7 +11,7 @@ import { ProductsService } from '../../services/products.service';
   templateUrl: './category-products.component.html',
   styleUrls: ['./category-products.component.scss'],
 })
-export class CategoryProductsComponent implements OnInit {
+export class CategoryProductsComponent implements OnInit, OnDestroy {
   products: Product[] = [];
   category: Category;
   ensSubscription$: Subject<boolean> = new Subject<boolean>();
@@ -25,18 +25,23 @@ export class CategoryProductsComponent implements OnInit {
   ngOnInit(): void {
     this.route.params.subscribe({
       next: (params) => {
-        this._getCategory(params['id']);
-        this._geProducts(params['id']);
+        if (params['id']) {
+          this._getCategory(params['id']);
+          this._geProducts(params['id']);
+        }
       },
     });
   }
 
   private _getCategory(id: string) {
-    this.categoriesService.findCategory(id).subscribe({
-      next: (category) => {
-        this.category = category;
-      },
-    });
+    this.categoriesService
+      .findCategory(id)
+      .pipe(takeUntil(this.ensSubscription$))
+      .subscribe({
+        next: (category) => {
+          this.category = category;
+        },
+      });
   }
 
   private _geProducts(category: string) {
@@ -48,5 +53,10 @@ export class CategoryProductsComponent implements OnInit {
           this.products = products;
         },
       });
+  }
+
+  ngOnDestroy(): void {
+    this.ensSubscription$.next(true);
+    this.ensSubscription$.complete();
   }
 }
