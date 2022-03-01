@@ -1,0 +1,13 @@
+<div class="gallery" *ngIf="hasImages">
+    <div class="main-image">
+        <img [src]="host+selectedImage" alt="">
+    </div>
+    <div class="images">
+        <ul>
+            <li *ngFor="let image of images" (click)="changeSelectedImage(image)"
+                [ngStyle]="{'background-image':' url(' +host+image + ')'}">
+
+            </li>
+        </ul>
+    </div>
+</div>

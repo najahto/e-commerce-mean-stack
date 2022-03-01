@@ -5,6 +5,9 @@
     border-radius: 15px;
     min-height: 220px;
     margin-top: 85px;
+    img {
+      cursor: pointer;
+    }
   }
 
   .image {
@@ -16,6 +19,7 @@
   .name {
     margin: 10px 0;
     font-weight: 400;
+    cursor: pointer;
   }
 
   .price {

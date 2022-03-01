@@ -1,7 +1,7 @@
 <div class="product-item" *ngIf="product">
     <div class="product-item-wrapper flex flex-column justify-content-center align-items-center">
-        <img [src]="host+product.image" class="image" alt="product image">
-        <h4 class="name">
+        <img [routerLink]="'/product/'+product.id" [src]="host+product.image" class="image" alt="product image">
+        <h4 class="name" [routerLink]="'/product/'+product.id">
             {{product.name}}
         </h4>
         <h5 class="price mt-2">{{product.price |currency}}</h5>

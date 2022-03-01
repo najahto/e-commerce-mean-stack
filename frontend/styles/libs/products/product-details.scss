@@ -1,0 +1,28 @@
+.product-details {
+  .product {
+    &-name {
+      font-size: 1.3em;
+      font-weight: 500;
+    }
+    &-price {
+      font-size: 1.4em;
+      font-weight: 600;
+    }
+    &-description {
+      font-size: 1.2em;
+      font-weight: 300;
+      border-bottom: 1px solid var(--surface-300);
+      padding: 15px 0;
+    }
+    .p-button {
+      background-color: $primary-color;
+      border: 0;
+      &:hover {
+        background-color: $primary-color-dark;
+      }
+    }
+  }
+  .rich-description {
+    line-height: 1.6;
+  }
+}
