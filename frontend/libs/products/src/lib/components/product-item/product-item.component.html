@@ -5,6 +5,6 @@
             {{product.name}}
         </h4>
         <h5 class="price mt-2">{{product.price |currency}}</h5>
-        <p-button styleClass="mt-4 add-to-cart" label="Add to cart" icon="pi pi-shopping-cart"></p-button>
+        <p-button (onClick)="addToCart()" styleClass="mt-4 add-to-cart" label="Add to cart" icon="pi pi-shopping-cart"></p-button>
     </div>
 </div>

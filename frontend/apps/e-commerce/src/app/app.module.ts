@@ -11,6 +11,7 @@ import { NavComponent } from './shared/nav/nav.component';
 import { ProductsModule } from '@frontend/products';
 import { UiModule } from '@frontend/ui';
 import { HttpClientModule } from '@angular/common/http';
+import { OrdersModule } from '@frontend/orders';
 
 const routes: Routes = [
   {
@@ -34,6 +35,7 @@ const routes: Routes = [
     HttpClientModule,
     ProductsModule,
     UiModule,
+    OrdersModule,
   ],
   providers: [],
   bootstrap: [AppComponent],
