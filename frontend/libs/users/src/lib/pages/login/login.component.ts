@@ -46,7 +46,7 @@ export class LoginComponent implements OnInit {
       .login(this.loginForm['email'].value, this.loginForm['password'].value)
       .subscribe({
         next: (user) => {
-          this.localStorageService.setToken(user.token);
+          this.localStorageService.setToken(user.token as string);
         },
         error: (error: HttpErrorResponse) => {
           this.isLoading = false;

@@ -11,12 +11,11 @@ export class LocalStorageService {
     localStorage.setItem(TOKEN, data);
   }
 
-  getToken(): string {
+  getToken(): string | null {
     return localStorage.getItem(TOKEN);
   }
 
   removeToken() {
-    console.log("🚀 ~ file: local-storage.service.ts ~ line 19 ~ LocalStorageService ~ removeToken ~ removeToken")
     localStorage.removeItem(TOKEN);
   }
 }
