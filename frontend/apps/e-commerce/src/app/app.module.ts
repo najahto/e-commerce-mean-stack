@@ -12,6 +12,9 @@ import { ProductsModule } from '@frontend/products';
 import { UiModule } from '@frontend/ui';
 import { HttpClientModule } from '@angular/common/http';
 import { OrdersModule } from '@frontend/orders';
+import { MessagesComponent } from './shared/messages/messages.component';
+import { ToastModule } from 'primeng/toast';
+import { MessageService } from 'primeng/api';
 
 const routes: Routes = [
   {
@@ -27,6 +30,7 @@ const routes: Routes = [
     FooterComponent,
     HomePageComponent,
     NavComponent,
+    MessagesComponent,
   ],
   imports: [
     BrowserModule,
@@ -36,8 +40,10 @@ const routes: Routes = [
     ProductsModule,
     UiModule,
     OrdersModule,
+    ToastModule,
   ],
-  providers: [],
+  providers: [MessageService],
   bootstrap: [AppComponent],
+  exports: [MessagesComponent],
 })
 export class AppModule {}
